@@ -1,0 +1,192 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@500;800&display=swap');
+
+:root {
+    --bg-color: #323437;
+    --main-color: #e2b714;
+    --text-color: #d1d0c5;
+    --sub-color: #646669;
+    --error-color: #ca4754;
+    --char-width: 24px;
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    font-family: 'Roboto Mono', monospace;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+.container {
+    width: 800px;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+/* --- 1. Statistiken ganz oben --- */
+.stats-container {
+    display: flex;
+    justify-content: space-between;
+    padding: 0 50px;
+}
+
+.stat-box {
+    color: var(--sub-color);
+    font-size: 1.1rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.stat-box span {
+    color: var(--main-color);
+    font-weight: bold;
+    font-size: 1.4rem;
+    margin-left: 8px;
+}
+
+/* --- 2. Das Text-Fenster (Laufband) --- */
+.text-display-container {
+    width: 600px; 
+    height: 100px;
+    margin: 0 auto;
+    overflow: hidden;
+    position: relative;
+    background-color: rgba(0, 0, 0, 0.4); /* Dunkler am Anfang */
+    display: flex;
+    align-items: center;
+    border-radius: 12px;
+    border: 2px solid #2c2e31;
+    transition: all 0.4s ease; /* Sanfter Übergang beim Start */
+    filter: blur(1.5px); /* Unschärfe am Anfang */
+}
+
+/* Wenn das Spiel gestartet wurde */
+.text-display-container.active {
+    background-color: rgba(0, 0, 0, 0.2);
+    filter: blur(0);
+    border-color: var(--sub-color);
+}
+
+/* Fokus-Rahmen (Unterstrich in der Mitte) */
+.text-display-container::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    width: var(--char-width);
+    /* Die Höhe sollte so sein, dass der Strich unter dem Text sitzt */
+    height: 75px; 
+    border-bottom: 3px solid var(--main-color);
+    pointer-events: none;
+    z-index: 5;
+}
+
+#text-display {
+    display: flex;
+    white-space: nowrap;
+    transition: transform 0.15s cubic-bezier(0.17, 0.67, 0.83, 0.67);
+    padding-left: 300px; /* Text startet genau in der Mitte */
+}
+
+#text-display span {
+    display: inline-block;
+    width: var(--char-width);
+    min-width: var(--char-width);
+    font-size: 40px;
+    text-align: center;
+    color: var(--sub-color);
+}
+
+#text-display span.correct { color: var(--text-color); }
+#text-display span.incorrect { 
+    color: var(--error-color); 
+    background-color: rgba(202, 71, 84, 0.1);
+}
+
+/* Platzhalter-Text Styling */
+.placeholder-text {
+    width: 100%;
+    text-align: center;
+    color: var(--sub-color);
+    font-size: 1.2rem;
+}
+
+/* --- 3. Eingabefeld (Unsichtbar) --- */
+#text-input {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* --- 4. Start Button Bereich --- */
+#start-overlay {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+#start-btn {
+    padding: 15px 40px;
+    font-size: 1.2rem;
+    cursor: pointer;
+    background: var(--main-color);
+    color: var(--bg-color);
+    border: none;
+    border-radius: 8px;
+    font-family: inherit;
+    font-weight: 800;
+    transition: transform 0.2s, background 0.2s;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+}
+
+#start-btn:hover {
+    transform: translateY(-3px);
+    background: #f5c71a;
+}
+
+/* --- 5. Ergebnis Modal --- */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(5px);
+    z-index: 100;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background: var(--bg-color);
+    padding: 40px;
+    border-radius: 20px;
+    border: 2px solid var(--main-color);
+    text-align: center;
+    max-width: 400px;
+    width: 90%;
+}
+
+.restart-btn {
+    margin-top: 25px;
+    padding: 12px 30px;
+    background: var(--main-color);
+    border: none;
+    border-radius: 5px;
+    font-family: inherit;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+/* Animationen */
+@keyframes popIn {
+    0% { transform: scale(0.8); opacity: 0; }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+#final-score {
+    animation: popIn 0.5s ease-out;
+}
